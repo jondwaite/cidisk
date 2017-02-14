@@ -13,6 +13,12 @@ Remove-CIDisk | Removes/Permanently deletes and Independent Disk object
 Mount-CIDisk | Attaches an Independent Disk to a Virtual Machine
 Dismount-CIDisk | Detaches an Independent Disk from a Virtual Machine
 
+## Installation ##
+
+To make these functions available, save the CIDisk.psm1 file somewhere convenient and use PowerShell's Import-Module command:
+
+e.g. `Import-Module "C:\PowerShellModules\CIDisk.psm1"`
+
 Note that error checking is reasonably basic, so attempting to attach the same disk simulateously to two different VMs (for example) will likely generate an API error.
 
 This module works well for me, but (as always) please test carefully before using/relying on it in any sort of production scenario.
