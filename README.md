@@ -21,11 +21,11 @@ Parameters for each cmdlet are detailed below.
 
 Returns details of any Independent Disk objects in accessible VDCs.
 
-Parameter | Required? | Description
---------- | --------- | -----------
--VDCName | False | The name of the VDC to search for independent disks, if no name is specified and multiple VDCs are available the first accessible VDC will be used.
--DiskName | False | The name of the disk to search for, if multiple disks have common name attributes they will all be returned. Note that the match on DiskName is case-sensitive.
--DiskHref | False | The unique cloud URI for the independent disk, can be used to ensure that the correct specific disk is returned.
+Parameter | Type | Required? | Default | Description
+--------- | ---- | --------- | --------| -----------
+VDCName | String | False | - | The name of the VDC to search for independent disks, if no name is specified and multiple VDCs are available the first accessible VDC will be used.
+DiskName | String | False | - | The name of the disk to search for, if multiple disks have common name attributes they will all be returned. Note that the match on DiskName is case-sensitive.
+DiskHref | String | False | - | The unique cloud URI for the independent disk, can be used to ensure that the correct specific disk is returned.
 
 Returns:
 Null (if no disks found) or an array of disk objects if one or more disks are found sorted by disk name. Returned disk objects have the following members:
@@ -46,16 +46,16 @@ Allows creation of a new Independent Disk object.
 
 Parameters:
 
-Parameter | Required? | Default | Description
+Parameter | Type | Required? | Default | Description
 --------- | --------- | ------- | -----------
--DiskName | True | None | The name for this disk
--DiskSize | True | None | The size of the disk to be created in bytes. The suffix 'K', 'M' or 'G' can be used to easily express larger sizes (e.g. 100G)
--VDCName | False | None | The name of the VDC in which the disk should be created. If not specified the first accessible VDC will be used
--StorageProfileHref | False | None | The URI of a VDC storage profile to be used for the creation of the disk. If not specified the default storage profile for the VDC will be used
--DiskDescription | False | None | A text description of this disk
--BusSubType | False | lsilogicsas | The vCloud Director storage bus type for this disk
--BusType | False | 6 | The vCloud Director storage bus type for this disk
--WaitforTask | False | True | Whether to wait for the creation operation to complete or return immediately while the disk may still be being created
+DiskName | String | True | - | The name for this disk
+DiskSize | String | True | - | The size of the disk to be created in bytes. The suffix 'K', 'M' or 'G' can be used to easily express larger sizes (e.g. 100G)
+VDCName | String | False | - | The name of the VDC in which the disk should be created. If not specified the first accessible VDC will be used
+StorageProfileHref | String | False | - | The URI of a VDC storage profile to be used for the creation of the disk. If not specified the default storage profile for the VDC will be used
+DiskDescription | String | False | - | A text description of this disk
+BusSubType | String | False | lsilogicsas | The vCloud Director storage bus type for this disk
+BusType | String | False | 6 | The vCloud Director storage bus type for this disk
+WaitforTask | Boolean | False | True | Whether to wait for the creation operation to complete or return immediately while the disk may still be being created
 
 
 
