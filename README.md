@@ -47,7 +47,7 @@ Allows creation of a new Independent Disk object.
 Parameters:
 
 Parameter | Type | Required? | Default | Description
---------- | --------- | ------- | -----------
+--------- | ---- | --------- | --------| -----------
 DiskName | String | True | - | The name for this disk
 DiskSize | String | True | - | The size of the disk to be created in bytes. The suffix 'K', 'M' or 'G' can be used to easily express larger sizes (e.g. 100G)
 VDCName | String | False | - | The name of the VDC in which the disk should be created. If not specified the first accessible VDC will be used
