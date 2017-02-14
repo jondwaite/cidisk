@@ -19,7 +19,15 @@ To make these functions available, save the CIDisk.psm1 file somewhere convenien
 
 e.g. `Import-Module "C:\PowerShellModules\CIDisk.psm1"`
 
-Note that error checking is reasonably basic, so attempting to attach the same disk simulateously to two different VMs (for example) will likely generate an API error.
+## Usage ##
+
+The module relies on an existing PowerCLI connection to a vCloud infrastructure (`Connect-CIServer`) to function, it will not function without a current session. It will also stop working if a cloud session expires (timeout).
+
+If you are connected to multiple vCloud sessions it will only operate against the first vCloud session it finds so it's best/safest to only be connected to a single vCloud session to avoid confusion.
+
+## Notes ##
+
+Note that error checking is reasonably (very) basic, so attempting to attach the same disk simulateously to two different VMs (for example) will likely generate an API error.
 
 This module works well for me, but (as always) please test carefully before using/relying on it in any sort of production scenario.
 
