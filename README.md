@@ -127,11 +127,9 @@ Below are some usage examples, these flow on from each other and show the lifecy
 
 Create 2 new independent disks of size 5G on the default VDC with default VDC storage profile named 'disk01' and 'disk02':
 
-`New-CIDisk -DiskName 'disk01' -DiskSize 5G -DiskDescription 'Disk 01'`
+```New-CIDisk -DiskName 'disk01' -DiskSize 5G -DiskDescription 'Disk 01'
 
-Output:
-
-```Request submitted, waiting for task to complete...
+Request submitted, waiting for task to complete...
 Task completed successfully.
 
 Name        : disk01
@@ -143,10 +141,8 @@ Storage     : Bronze Storage Profile
 AttachedTo  : Not Attached
 
 New-CIDisk -DiskName 'disk02' -DiskSize 5G -DiskDescription 'Disk 02'
-```
-Output:
 
-```Request submitted, waiting for task to complete...
+Request submitted, waiting for task to complete...
 Task completed successfully.
 
 Name        : disk02
