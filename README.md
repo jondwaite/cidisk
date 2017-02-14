@@ -19,15 +19,17 @@ Parameters for each cmdlet are detailed below.
 
 ## Get-CIDisk ##
 
-Required Parameters: None
-Optional Parameters:
-Parameter | Description
---------- | -----------
--VDCName | The name of the VDC to search for independent disks, if no name is specified and multiple VDCs are available the first accessible VDC will be used.
--DiskName | The name of the disk to search for, if multiple disks have common name attributes they will all be returned. Note that the match on DiskName is case-sensitive.
--DiskHref | The unique cloud URI for the independent disk, can be used to ensure that the correct specific disk is returned.
+Returns details of any Independent Disk objects in accessible VDCs.
+
+Parameter | Required? | Description
+--------- | --------- | -----------
+-VDCName | False | The name of the VDC to search for independent disks, if no name is specified and multiple VDCs are available the first accessible VDC will be used.
+-DiskName | False | The name of the disk to search for, if multiple disks have common name attributes they will all be returned. Note that the match on DiskName is case-sensitive.
+-DiskHref | False | The unique cloud URI for the independent disk, can be used to ensure that the correct specific disk is returned.
+
 Returns:
-Null (if no disks found) or an array of disk objects if one or more disks are found. These disk objects have the following members:
+Null (if no disks found) or an array of disk objects if one or more disks are found sorted by disk name. Returned disk objects have the following members:
+
 Member | Description
 ------ | -----------
 Name | The disk name
@@ -37,6 +39,24 @@ Size | The disk size, large sizes are adjusted and use the 'KB', 'MB' and 'GB' s
 BusType | The vCloud Storage Bus Type for the disk
 Storage | The name of the storage profile on which the disk is located
 AttachedTo | The name of the virtual machine to which the disk is currently attached, or 'Not Attached' if no current attachment
+
+## New-CIDisk ##
+
+Allows creation of a new Independent Disk object.
+
+Parameters:
+
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+-DiskName | True | None | The name for this disk
+-DiskSize | True | None | The size of the disk to be created in bytes. The suffix 'K', 'M' or 'G' can be used to easily express larger sizes (e.g. 100G)
+-VDCName | False | None | The name of the VDC in which the disk should be created. If not specified the first accessible VDC will be used
+-StorageProfileHref | False | None | The URI of a VDC storage profile to be used for the creation of the disk. If not specified the default storage profile for the VDC will be used
+-DiskDescription | False | None | A text description of this disk
+-BusSubType | False | lsilogicsas | The vCloud Director storage bus type for this disk
+-BusType | False | 6 | The vCloud Director storage bus type for this disk
+-WaitforTask | False | True | Whether to wait for the creation operation to complete or return immediately while the disk may still be being created
+
 
 
 
