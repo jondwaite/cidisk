@@ -53,10 +53,50 @@ DiskSize | String | True | - | The size of the disk to be created in bytes. The 
 VDCName | String | False | - | The name of the VDC in which the disk should be created. If not specified the first accessible VDC will be used
 StorageProfileHref | String | False | - | The URI of a VDC storage profile to be used for the creation of the disk. If not specified the default storage profile for the VDC will be used
 DiskDescription | String | False | - | A text description of this disk
-BusSubType | String | False | lsilogicsas | The vCloud Director storage bus type for this disk
+BusSubType | String | False | lsilogicsas | The vCloud Director storage bus subtype for this disk
 BusType | String | False | 6 | The vCloud Director storage bus type for this disk
 WaitforTask | Boolean | False | True | Whether to wait for the creation operation to complete or return immediately while the disk may still be being created
 
+Returns:
+Null if disk creation fails, or a disk object in Get-CIDisk format (see above) for the newly created disk if successful.
 
+## Remove-CIDisk ##
 
+Permanently deletes the specified Independent Disk object. Note that no confirmation is prompted for or required so use with care. If the disk is currently attached to a VM it cannot be deleted and this will generate an error (use Dismount-CIDisk first - see below)
 
+Parameters:
+
+Parameter | Type | Required? | Default | Description
+--------- | ---- | --------- | --------| -----------
+DiskHref | String | True | - | The cloud URI of the disk object to be removed. Since disk names are not guaranteed to be unique this is the only way to guarantee a specific disk. The href parameter of the Get-CIDisk cmdlet (see above) can be used to find this URI
+
+Returns:
+Nothing, an error message will be written to console if the remove fails.
+
+## Mount-CIDisk ##
+
+Attaches the specified Independent Disk to a Virtual Machine. The Get-CIVM cmdlet (VMware PowerCLI) can be used to find the Href of the VM object. The Get-CIDisk cmdlet (see above) can be used to find the Href of the Independent Disk object. The cmdlet will block (halt script execution) until the operation has either completed or failed with an error.
+
+Parameters:
+
+Parameter | Type | Required? | Default | Description
+--------- | ---- | --------- | --------| -----------
+VMHref | String | True | - | The cloud URI of the VM to which the disk is to be attached
+DiskHref | String | True | - | The cloud URI of the Independent Disk object which is being attached to the VM
+
+Returns:
+Nothing, an error message will be written to console if the operation fails.
+
+## Dismount-CIDisk ##
+
+Detaches the specified Independent Disk from a Virtual Machine. The Get-CIVM cmdlet (VMware PowerCLI) can be used to find the Href of the VM object. The Get-CIDisk cmdlet (see above) can be used to find the Href of the Independent Disk object. The cmdlet will block (halt script execution) until the operation has either completed or failed with an error.
+
+Parameters:
+
+Parameter | Type | Required? | Default | Description
+--------- | ---- | --------- | --------| -----------
+VMHref | String | True | - | The cloud URI of the VM to which the disk is to be detached
+DiskHref | String | True | - | The cloud URI of the Independent Disk object which is being attached to the VM
+
+Returns:
+Nothing, an error message will be written to console if the operation fails.
