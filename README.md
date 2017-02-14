@@ -118,3 +118,140 @@ DiskHref | String | True | - | The cloud URI of the Independent Disk object whic
 
 Returns:
 Nothing, an error message will be written to console if the operation fails.
+
+## Examples ##
+
+Below are some usage examples, these flow on from each other and show the lifecycle of creating, viewing, attaching, detaching, and deleting some Independent disks from 2 VMs.
+
+### Example 1 ###
+
+Create 2 new independent disks of size 5G on the default VDC with default VDC storage profile named 'disk01' and 'disk02':
+
+`New-CIDisk -DiskName 'disk01' -DiskSize 5G -DiskDescription 'Disk 01'`
+Output:
+`Request submitted, waiting for task to complete...
+Task completed successfully.
+
+Name        : disk01
+Href        : https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193
+Description : Disk 01
+Size        : 5 GB
+BusType     : lsilogicsas
+Storage     : Bronze Storage Profile
+AttachedTo  : Not Attached`
+
+`New-CIDisk -DiskName 'disk02' -DiskSize 5G -DiskDescription 'Disk 02'`
+Output:
+`Request submitted, waiting for task to complete...
+Task completed successfully.
+
+
+Name        : disk02
+Href        : https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b
+Description : Disk 02
+Size        : 5 GB
+BusType     : lsilogicsas
+Storage     : Bronze Storage Profile
+AttachedTo  : Not Attached`
+
+### Example 2 ###
+
+View details of currently defined independent disk objects:
+
+`Get-CIDisk`
+Output:
+`Name        : disk01
+Href        : https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193
+Description : Disk 01
+Size        : 5 GB
+BusType     : lsilogicsas
+Storage     : Bronze Storage Profile
+AttachedTo  : Not Attached
+
+Name        : disk02
+Href        : https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b
+Description : Disk 02
+Size        : 5 GB
+BusType     : lsilogicsas
+Storage     : Bronze Storage Profile
+AttachedTo  : Not Attached`
+
+View independent disk details as formatted table:
+
+`Get-CIDisk | ft -Autosize`
+Output:
+`Name   Href                                                              Description Size
+----   ----                                                               ----------- ----
+disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB
+disk02 https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b Disk 02     5 GB`
+
+### Example 3 ###
+
+Get references to both disks and to a VM named 'vm01' in the vApp 'testvApp':
+
+`$vm01 = Get-CIVM -Name 'vm01' -vApp 'testvApp'
+$vm01.href
+https://my.cloud.com/api/vApp/vm-18595e04-8625-43c5-b4f4-d9d5e1094345
+
+$disk01 = Get-CIDisk -DiskName 'disk01'
+$disk01.href
+https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193
+$disk02 = Get-CIDisk -DiskName 'disk02'
+$disk02.href
+https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b`
+
+### Example 4 ###
+
+Attach both disks to the vm01 VM using `Mount-CIDisk`:
+
+`Mount-CIDisk -VMHref $vm01.href -DiskHref $disk01.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.
+
+Mount-CIDisk -VMHref $vm01.href -DiskHref $disk02.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.`
+
+### Example 5 ###
+
+View details of independent disks showing the attachment to vm01:
+
+`Get-CIDisk | ft -AutoSize
+Name   Href                                                               Description Size BusType     Storage                AttachedTo
+----   ----                                                               ----------- ---- -------     -------                ----------
+disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB lsilogicsas Bronze Storage Profile vm01
+disk02 https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b Disk 02     5 GB lsilogicsas Bronze Storage Profile vm01`
+
+### Example 6 ###
+
+Detach both disks from vm01:
+
+`Dismount-CIDisk -VMHref $vm01.href -DiskHref $disk01.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.
+
+Dismount-CIDisk -VMHref $vm01.href -DiskHref $disk02.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.`
+
+### Example 7 ###
+
+Check the disk details in Get-CIDisk again to confirm the detachment from vm01:
+
+`Get-CIDisk | ft -AutoSize
+Name   Href                                                               Description Size BusType     Storage                AttachedTo
+----   ----                                                               ----------- ---- -------     -------                ----------
+disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB lsilogicsas Bronze Storage Profile Not Attached
+disk02 https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b Disk 02     5 GB lsilogicsas Bronze Storage Profile Not Attached`
+
+### Example 8 ###
+
+Remove and permanently delete the independent disks:
+
+`Remove-CIDisk -DiskHref $disk01.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.
+
+Remove-CIDisk -DiskHref $disk02.Href
+Request submitted, waiting for task to complete...
+Task completed successfully.`
