@@ -162,6 +162,11 @@ error will be returned.
 An Independent Disk name to search for, if matched disk details will be returned
 for disk(s) with this name only.
 
+.PARAMETER DiskHref
+A cloud URI uniquely identifying a specific independent disk. Unlike the
+DiskName parameter, specifying the DiskHref guarantees that only a single
+matching disk will be returned.
+
 .OUTPUTS
 Details of each Indpendent Disk found matching the input criteria.
 
@@ -226,6 +231,56 @@ function New-CIDisk(
     [string]$BusType = '6',
     [boolean]$WaitforTask = $true
 )
+<#
+.SYNOPSIS
+Creates Independent Disk based on input parameters.
+
+.DESCRIPTION
+New-CIDisk uses the vCloud REST API to create an Indpendent Disk object and
+returns an object containing the specifications of the newly created disk.
+
+.PARAMETER DiskName
+The name to assign to the new disk object.
+
+.PARAMETER DiskSize
+The size (in bytes) for the new disk object, the suffixes 'K', 'M' and 'G'
+are recognised to allow for easy calculation of larger disk sizes (e.g. 10G).
+
+.PARAMETER VDCName
+Optional - The name of the virtual Datacenter (VDC) to create the disk in (if
+multiple VDCs are accessible to the current session it is suggested to specify
+this).
+
+.PARAMETER StorageProfileHref
+Optional - The cloud URI of the storage profile in which to create this disk
+if multiple storage profiles are available. By default the VDC's default
+storage profile will be used.
+
+.PARAMETER Disk Description
+Optional - A text description of the disk being created.
+
+.PARAMETER BusSubType
+Optional - The vSphere Bus Sub Type for this disk, defaults to 'lsilogicsas'
+which should be the most universally compatible type. Note that 'lsilogic'
+results in a 'LSI Logic Parallel' disk which has no drivers available for
+several guest Operating Systems including Windows Server 2012/2012R2.
+
+.PARAMETER BusType
+Optional - The vSphere Bus Type for the disk - safest to leave at the default
+value of '6'.
+
+.PARAMETER WaitforTask
+Optional - A boolean value indicating whether New-CIDisk should wait until the
+disk has been fully created before returning (default = $true).
+
+.OUTPUTS
+A disk object for the newly created disk in a format compatible with the
+Get-CIDisk cmdlet.
+
+.NOTES
+You must have an existing vCloud session (Connect-CIServer) for this function
+to work. 
+#>
 {
     if (!$VDCName) {
         $vdc = Get-OrgVdc
@@ -255,7 +310,7 @@ function New-CIDisk(
     $diskxml += ' busType="' + $BusType + '"'
     $diskxml += ' size="' + $DiskBytes + '">'
     if ($DiskDescription) { $diskxml += '<Description>' + $DiskDescription + '</Description>' }
-    if ($StorageProfileLink) { $diskxml += '<StorageProfile href="' + $StorageProfileLink + '"/>' }
+    if ($StorageProfileHref) { $diskxml += '<StorageProfile href="' + $StorageProfileHref + '"/>' }
     $diskxml += '</Disk></DiskCreateParams>'
     
     $headers = @{"x-vcloud-authorization" = ($global:DefaultCIServers.SessionId); "Accept" = 'application/*+xml;version=5.1'}
@@ -269,6 +324,25 @@ function New-CIDisk(
 function Remove-CIDisk(
     [Parameter(Mandatory=$true)][string]$DiskHref
 )
+<#
+.SYNOPSIS
+Removes and permanently deletes an Independent Disk based on input parameters.
+
+.DESCRIPTION
+Remove-CIDisk uses the vCloud REST API to delete an Indpendent Disk object.
+
+.PARAMETER DiskHref
+The cloud URI of the disk to be removed/deleted. Note that if the disk is
+currently attached to a VM this will be detected and the disk cannot be
+deleted until it is detached from any VM (Dismount-CIDisk).
+
+.OUTPUTS
+Success / failure messages on host console.
+
+.NOTES
+You must have an existing vCloud session (Connect-CIServer) for this function
+to work. 
+#>
 {
     # CAUTION! - Minimal error checking, this will permanently delete the disk passed by reference!!!
     [xml]$attached = vCloud-REST -URI ($DiskHref + '/attachedVms') -Method 'Get'
@@ -284,6 +358,27 @@ function Mount-CIDisk(
     [Parameter(Mandatory=$true)][string]$VMHref,
     [Parameter(Mandatory=$true)][string]$DiskHref
 )
+<#
+.SYNOPSIS
+Attaches an independent disk to a specific VM based on input parameters.
+
+.DESCRIPTION
+Mount-CIDisk uses the vCloud REST API to mount a specific Indpendent Disk to
+a virtual machine.
+
+.PARAMETER DiskHref
+The cloud URI of the disk to be mounted.
+
+.PARAMETER VMHref
+The cloud URI of the virtual machine on which the disk is to be mounted.
+
+.OUTPUTS
+Success / failure messages on host console.
+
+.NOTES
+You must have an existing vCloud session (Connect-CIServer) for this function
+to work. 
+#>
 {
     $VMHref += '/disk/action/attach'
     $xml = Build-DiskXML -DiskHref $DiskHref
@@ -295,6 +390,27 @@ function Dismount-CIDisk(
     [Parameter(Mandatory=$true)][string]$VMHref,
     [Parameter(Mandatory=$true)][string]$DiskHref
 )
+<#
+.SYNOPSIS
+Detaches an independent disk from a specific VM based on input parameters.
+
+.DESCRIPTION
+Dismount-CIDisk uses the vCloud REST API to dismount a specific Indpendent Disk
+from a virtual machine.
+
+.PARAMETER DiskHref
+The cloud URI of the disk to be dismounted.
+
+.PARAMETER VMHref
+The cloud URI of the virtual machine from which the disk is to be dismounted.
+
+.OUTPUTS
+Success / failure messages on host console.
+
+.NOTES
+You must have an existing vCloud session (Connect-CIServer) for this function
+to work. 
+#>
 {
     $VMHref += '/disk/action/detach'
     $xml = Build-DiskXML -DiskHref $DiskHref
