@@ -183,12 +183,6 @@ View independent disk details as formatted table:
 
 ```
 Get-CIDisk | ft -Autosize
-
-Name   Href                                                              Description Size
-----   ----                                                               ----------- ----
-disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB
-disk02 https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b Disk 02     5 GB
-
 Name   Href                                                               Description Size BusType     Storage                AttachedTo
 ----   ----                                                               ----------- ---- -------     -------                ----------
 disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB lsilogicsas Bronze Storage Profile Not Attached
