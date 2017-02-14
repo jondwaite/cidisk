@@ -121,7 +121,7 @@ Nothing, an error message will be written to console if the operation fails.
 
 ## Examples ##
 
-Below are some usage examples, these flow on from each other and show the lifecycle of creating, viewing, attaching, detaching, and deleting some Independent disks from 2 VMs.
+Below are some usage examples, these flow on from each other and show the lifecycle of creating, viewing, attaching, detaching, and deleting some Independent disks from a VM.
 
 ### Example 1 ###
 
