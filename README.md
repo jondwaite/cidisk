@@ -128,8 +128,10 @@ Below are some usage examples, these flow on from each other and show the lifecy
 Create 2 new independent disks of size 5G on the default VDC with default VDC storage profile named 'disk01' and 'disk02':
 
 `New-CIDisk -DiskName 'disk01' -DiskSize 5G -DiskDescription 'Disk 01'`
+
 Output:
-`Request submitted, waiting for task to complete...
+
+```Request submitted, waiting for task to complete...
 Task completed successfully.
 
 Name        : disk01
@@ -138,13 +140,14 @@ Description : Disk 01
 Size        : 5 GB
 BusType     : lsilogicsas
 Storage     : Bronze Storage Profile
-AttachedTo  : Not Attached`
+AttachedTo  : Not Attached
 
-`New-CIDisk -DiskName 'disk02' -DiskSize 5G -DiskDescription 'Disk 02'`
+New-CIDisk -DiskName 'disk02' -DiskSize 5G -DiskDescription 'Disk 02'
+```
 Output:
-`Request submitted, waiting for task to complete...
-Task completed successfully.
 
+```Request submitted, waiting for task to complete...
+Task completed successfully.
 
 Name        : disk02
 Href        : https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b
@@ -152,14 +155,17 @@ Description : Disk 02
 Size        : 5 GB
 BusType     : lsilogicsas
 Storage     : Bronze Storage Profile
-AttachedTo  : Not Attached`
+AttachedTo  : Not Attached
+```
 
 ### Example 2 ###
 
 View details of currently defined independent disk objects:
 
 `Get-CIDisk`
+
 Output:
+
 `Name        : disk01
 Href        : https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193
 Description : Disk 01
@@ -179,7 +185,9 @@ AttachedTo  : Not Attached`
 View independent disk details as formatted table:
 
 `Get-CIDisk | ft -Autosize`
+
 Output:
+
 `Name   Href                                                              Description Size
 ----   ----                                                               ----------- ----
 disk01 https://my.cloud.com/api/disk/8af07fc1-b6ab-40ae-aa46-fbcdac05f193 Disk 01     5 GB
@@ -202,7 +210,7 @@ https://my.cloud.com/api/disk/3c274b3e-eb78-4fa2-8983-70f41858466b`
 
 ### Example 4 ###
 
-Attach both disks to the vm01 VM using `Mount-CIDisk`:
+Attach both disks to the vm01 VM using Mount-CIDisk:
 
 `Mount-CIDisk -VMHref $vm01.href -DiskHref $disk01.Href
 Request submitted, waiting for task to complete...
