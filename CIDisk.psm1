@@ -2,7 +2,7 @@
 ##
 ## Requires:
 ##   - PowerCLI 6.x+ (Tested with 6.5 Realease 1 Build 4624819)
-##   - vCloud API 5.1+ (Tested with vCloud Director 8.10.1)
+##   - vCloud API 20.0+ (Tested with vCloud Director 8.10.1)
 ##   - PowerCLI session connected to Cloud (Connect-CIServer)
 ##
 ## Provides:
@@ -68,7 +68,7 @@ Function vCloud-REST(
     [Parameter(Mandatory=$true)][string]$URI,
     [string]$ContentType,
     [string]$Method = 'Get',
-    [string]$ApiVersion = '5.1',
+    [string]$ApiVersion = '20.0',
     [string]$Body,
     [boolean]$WaitForTask = $false,
     [int]$Timeout = 40
@@ -95,7 +95,7 @@ Function vCloud-REST(
             $taskuri = $response.Task.href
         }
         if ($taskuri) {
-            $status = WaitVC-Task -TaskURI $taskuri -Timeout $Timeout -ApiVersion '5.1'
+            $status = WaitVC-Task -TaskURI $taskuri -Timeout $Timeout -ApiVersion '20.0'
             if ($status) {
                 Write-Host "Task completed successfully."
             } else {
@@ -112,7 +112,7 @@ Function vCloud-REST(
 Function WaitVC-Task(
     [Parameter(Mandatory=$true)][String]$TaskURI,
     [Int]$Timeout = 40,
-    [String]$ApiVersion = '5.1'
+    [String]$ApiVersion = '20.0'
 ) 
 {
     $Headers = @{"x-vcloud-authorization" = ($global:DefaultCIServers.SessionId); "Accept" = 'application/*+xml;version=' + $ApiVersion}
@@ -313,7 +313,7 @@ to work.
     if ($StorageProfileHref) { $diskxml += '<StorageProfile href="' + $StorageProfileHref + '"/>' }
     $diskxml += '</Disk></DiskCreateParams>'
     
-    $headers = @{"x-vcloud-authorization" = ($global:DefaultCIServers.SessionId); "Accept" = 'application/*+xml;version=5.1'}
+    $headers = @{"x-vcloud-authorization" = ($global:DefaultCIServers.SessionId); "Accept" = 'application/*+xml;version=20.0'}
 
     [xml]$response = vCloud-REST -Method 'Post' -Body $diskxml -URI $VDCHref -ContentType 'application/vnd.vmware.vcloud.diskCreateParams+xml' -WaitForTask $WaitforTask
     $newdisk = Get-CIDisk -DiskHref $response.Disk.Href
